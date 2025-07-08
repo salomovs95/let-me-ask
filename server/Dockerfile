@@ -1,9 +1,9 @@
 FROM alpine:3.22 AS build
 
-COPY ./mvnw .
-COPY ./mvn/ .
-COPY ./pom.xml .
-COPY ./src/ .
+COPY mvnw .
+COPY mvn/ .
+COPY pom.xml .
+COPY src/ .
 
 RUN  ./mvnw clean -Dmaven.test.skip install
 
