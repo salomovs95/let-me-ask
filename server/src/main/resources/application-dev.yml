@@ -2,7 +2,14 @@ spring:
   sql:
     init:
       mode: always
-
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      jakarta:
+        persistence:
+          schema-generation:
+            scripts:
+              action: create
+              create-target: src/main/resources/create.sql
+              create-source: metadata
