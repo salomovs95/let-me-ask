@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: 'Let Me Ask'
+
+  profiles:
+    active: ${SPRING_PROFILE:dev}
+
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
