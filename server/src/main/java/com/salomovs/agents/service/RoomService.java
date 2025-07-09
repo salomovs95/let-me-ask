@@ -28,10 +28,14 @@ public class RoomService {
   }
 
   public String createQuestion(String slug, CreateQuestionDto dto) {
-    Room room = this.roomRepo
-                    .findBySlug(slug)
-                    .orElseThrow(()->new RuntimeException("Room Not Found Or Not Exists"));
+    Room room = findRoom(slug);
     RoomQuestion question = questionRepo.save(new RoomQuestion(dto.question(), room));
     return question.getId();
+  }
+
+  public Room findRoom(String slug) {
+    Room room = roomRepo.findBySlug(slug)
+                        .orElseThrow(()->new RuntimeException("Room Not Found Or Not Exists"));
+    return room;
   }
 }

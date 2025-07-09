@@ -1,6 +1,7 @@
 package com.salomovs.agents.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.salomovs.agents.dto.CreateQuestionDto;
 import com.salomovs.agents.dto.CreateRoomDto;
+import com.salomovs.agents.dto.RoomResponse;
 import com.salomovs.agents.model.entity.Room;
 import com.salomovs.agents.service.RoomService;
 
@@ -27,8 +29,11 @@ public class RoomsController {
   private final RoomService roomService;
 
   @GetMapping
-  public ResponseEntity<List<Room>> getRooms() {
-    List<Room> rooms = roomService.listRooms();
+  public ResponseEntity<List<RoomResponse>> getRooms() {
+    List<RoomResponse> rooms = roomService.listRooms()
+                                  .stream()
+                                  .map(RoomResponse::parse)
+                                  .collect(Collectors.toList());
     return ResponseEntity.status(HttpStatus.OK).body(rooms);
   }
 
@@ -39,7 +44,14 @@ public class RoomsController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @PostMapping("/{id}/questions")
+  @GetMapping("/{room_slug}")
+  public ResponseEntity<RoomResponse> findRoomBySlug(@RequestParam String slug) {
+    Room room = roomService.findRoom(slug);
+    RoomResponse res = RoomResponse.parse(room);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
+  }
+
+  @PostMapping("/{room_slug}/questions")
   public ResponseEntity<Void> placeQuestion(@RequestParam String slug, @RequestBody CreateQuestionDto body) {
     String questionId = roomService.createQuestion(slug, body);
     log.warn("New Question Placed: " + questionId);

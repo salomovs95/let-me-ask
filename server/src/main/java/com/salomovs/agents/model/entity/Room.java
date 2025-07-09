@@ -36,7 +36,6 @@ public class Room {
 
   private String description;
   private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
 
   @OneToMany(mappedBy="room")
   List<RoomQuestion> questions;
@@ -45,5 +44,6 @@ public class Room {
     this.title = title;
     this.description = description;
     this.slug = title.replace(" ", "-").toLowerCase();
+    this.createdAt = LocalDateTime.now();
   }
 }
