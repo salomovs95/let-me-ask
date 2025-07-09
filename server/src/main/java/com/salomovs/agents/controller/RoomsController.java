@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,7 @@ public class RoomsController {
     return ResponseEntity.status(HttpStatus.OK).body(rooms);
   }
 
+  @PostMapping
   public ResponseEntity<Void> openRoom(@RequestBody CreateRoomDto body) {
     String roomId = roomService.createRoom(body);
     log.warn("New Room Opened: " + roomId);
