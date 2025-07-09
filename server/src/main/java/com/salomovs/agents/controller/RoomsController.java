@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class RoomsController {
   private final RoomService roomService;
 
-  @GetMapping("")
+  @GetMapping
   public ResponseEntity<List<Room>> getRooms() {
     List<Room> rooms = roomService.listRooms();
     return ResponseEntity.status(HttpStatus.OK).body(rooms);

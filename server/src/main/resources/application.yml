@@ -5,6 +5,9 @@ spring:
   profiles:
     active: ${SPRING_PROFILE:dev}
 
+  cors:
+    origins: ${ALLOWED_ORIGINS:'*'}
+
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
