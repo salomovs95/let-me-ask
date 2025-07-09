@@ -1,0 +1,1 @@
+create table t_rooms (created_at timestamp(6), updated_at timestamp(6), description varchar(255), id varchar(255) not null, slug varchar(255) not null unique, title varchar(255) not null, primary key (id));
