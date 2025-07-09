@@ -38,4 +38,16 @@ public class RoomService {
                         .orElseThrow(()->new RuntimeException("Room Not Found Or Not Exists"));
     return room;
   }
+
+  public void updateQuestionAnswer(String questionId, String answer) {
+    RoomQuestion question = findQuestion(questionId);
+    question.setAnswer(answer);
+    questionRepo.save(question);
+  }
+
+  private RoomQuestion findQuestion(String questionId) {
+    RoomQuestion question = questionRepo.findById(questionId)
+                                        .orElseThrow(()->new RuntimeException("Question Not Found Or Not Exists"));
+    return question;
+  }
 }

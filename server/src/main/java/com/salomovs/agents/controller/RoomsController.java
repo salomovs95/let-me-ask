@@ -6,18 +6,21 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.salomovs.agents.dto.AnswerQuestionDto;
 import com.salomovs.agents.dto.CreateQuestionDto;
 import com.salomovs.agents.dto.CreateRoomDto;
 import com.salomovs.agents.dto.RoomResponse;
 import com.salomovs.agents.model.entity.Room;
 import com.salomovs.agents.service.RoomService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,5 +59,11 @@ public class RoomsController {
     String questionId = roomService.createQuestion(slug, body);
     log.warn("New Question Placed: " + questionId);
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @PatchMapping("/{room_slug}/questions/{question_id}")
+  public ResponseEntity<Void> answerQuestion(@RequestParam(name="question_id") String questionId, @RequestBody @Valid AnswerQuestionDto body) {
+    roomService.updateQuestionAnswer(questionId, body.answer());
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }
