@@ -12,7 +12,7 @@ import {
 } from './ui/card'
 
 export function RoomList() {
-  const { data, isLoading } = useFetch('/rooms', 'room-list')
+  const { data, isLoading } = useFetch('/rooms', 'rooms-list')
 
   return (
     <Card>
