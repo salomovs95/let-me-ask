@@ -1,18 +1,17 @@
 import { ArrowLeft, Radio } from 'lucide-react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-
+//import { QuestionForm } from '@/components/question-form'
+import { QuestionList } from '@/components/question-list'
 import { Button } from '@/components/ui/button'
-import { QuestionForm } from '@/components/question/question-form'
-import { QuestionItem } from '@/components/question/question-item'
 
 type RoomParams = {
-  roomId: string
+  roomSlug: string
 }
 
 export function Room() {
   const params = useParams<RoomParams>()
 
-  if (!params.roomId) {
+  if (!params.roomSlug) {
     return <Navigate replace to="/" />
   }
 
@@ -22,45 +21,31 @@ export function Room() {
         <div className="mb-8">
           <div className="mb-4 flex items-center justify-between">
             <Link to="/">
-              <Button variant="outline">
+              <Button variant="secondary">
                 <ArrowLeft className="mr-2 size-4" />
-                Voltar ao Início
+                To the start
               </Button>
             </Link>
-            <Link to={`/room/${params.roomId}/audio`}>
+            <Link to={`/rooms/${params.roomSlug}/audio`}>
               <Button className="flex items-center gap-2" variant="secondary">
                 <Radio className="size-4" />
-                Gravar Áudio
+                Record Audio
               </Button>
             </Link>
           </div>
           <h1 className="mb-2 font-bold text-3xl text-foreground">
-            Sala de Perguntas
+            Questions Room
           </h1>
           <p className="text-muted-foreground">
-            Faça perguntas e receba respostas com IA
+            Ask questions and get answers from AI
           </p>
         </div>
 
         <div className="mb-8">
-          <QuestionForm roomId={params.roomId} />
+          {/*<QuestionForm roomSlug={params.roomSlug} />*/}
         </div>
 
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-2xl text-foreground">
-              Perguntas & Respostas
-            </h2>
-          </div>
-
-          <QuestionItem
-            question={{
-              id: '1',
-              question: 'Pergunta 1',
-              createdAt: new Date().toISOString(),
-            }}
-          />
-        </div>
+        <QuestionList roomSlug={params.roomSlug} />
       </div>
     </div>
   )

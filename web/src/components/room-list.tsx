@@ -32,7 +32,7 @@ export function RoomList() {
             <Link
               className="flex items-center justify-between rounded-lg border p-3 hover:bg-accent/50"
               key={room.slug}
-              to={`/room/${room.slug}`}
+              to={`/rooms/${room.slug}`}
             >
               <div className="flex flex-1 flex-col gap-1">
                 <h3 className="font-medium">{room.title}</h3>

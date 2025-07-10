@@ -13,8 +13,6 @@ export function useFetch<T=any>(url:String, key:String) {
   return useQuery({
     queryKey: [key],
     queryFn: async () => {
-      //const response = await fetch(url, opts)
-      //const data: T = await response.json()
       const result = await api.get(url)
       const data: T = result.data
       return data
