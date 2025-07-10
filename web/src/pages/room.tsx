@@ -1,6 +1,6 @@
 import { ArrowLeft, Radio } from 'lucide-react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-//import { QuestionForm } from '@/components/question-form'
+import { QuestionForm } from '@/components/question-form'
 import { QuestionList } from '@/components/question-list'
 import { Button } from '@/components/ui/button'
 
@@ -42,7 +42,7 @@ export function Room() {
         </div>
 
         <div className="mb-8">
-          {/*<QuestionForm roomSlug={params.roomSlug} />*/}
+          <QuestionForm roomSlug={params.roomSlug} />
         </div>
 
         <QuestionList roomSlug={params.roomSlug} />
