@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.salomovs.agents.dto.AnswerQuestionDto;
@@ -48,21 +48,22 @@ public class RoomsController {
   }
 
   @GetMapping("/{room_slug}")
-  public ResponseEntity<RoomResponse> findRoomBySlug(@RequestParam String slug) {
-    Room room = roomService.findRoom(slug);
+  public ResponseEntity<RoomResponse> findRoomBySlug(@PathVariable(name="room_slug") String roomSlug) {
+    Room room = roomService.findRoom(roomSlug);
     RoomResponse res = RoomResponse.parse(room);
     return ResponseEntity.status(HttpStatus.OK).body(res);
   }
 
   @PostMapping("/{room_slug}/questions")
-  public ResponseEntity<Void> placeQuestion(@RequestParam String slug, @RequestBody CreateQuestionDto body) {
-    String questionId = roomService.createQuestion(slug, body);
+  public ResponseEntity<Void> placeQuestion(@PathVariable(name="room_slug") String roomSlug, @RequestBody CreateQuestionDto body) {
+    String questionId = roomService.createQuestion(roomSlug, body);
     log.warn("New Question Placed: " + questionId);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   @PatchMapping("/{room_slug}/questions/{question_id}")
-  public ResponseEntity<Void> answerQuestion(@RequestParam(name="question_id") String questionId, @RequestBody @Valid AnswerQuestionDto body) {
+  public ResponseEntity<Void> answerQuestion(@PathVariable(name="room_slug") String roomSlug, @PathVariable(name="question_id") String questionId, @RequestBody @Valid AnswerQuestionDto body) {
+    log.warn("Updating question " + questionId + " from room " + roomSlug);
     roomService.updateQuestionAnswer(questionId, body.answer());
     return ResponseEntity.status(HttpStatus.OK).build();
   }
