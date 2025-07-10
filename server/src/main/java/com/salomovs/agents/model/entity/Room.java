@@ -2,12 +2,14 @@
 package com.salomovs.agents.model.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -34,11 +36,14 @@ public class Room {
 
   private String description;
   private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
+
+  @OneToMany(mappedBy="room")
+  List<RoomQuestion> questions;
 
   public Room(String title, String description) {
     this.title = title;
     this.description = description;
     this.slug = title.replace(" ", "-").toLowerCase();
+    this.createdAt = LocalDateTime.now();
   }
 }

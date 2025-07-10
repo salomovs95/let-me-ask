@@ -9,13 +9,12 @@ import { api } from '@/lib/api'
   }
 }*/
 
-export function useFetch<T>(url:String, key:String) {
+export function useFetch<T=any>(url:String, key:String) {
   return useQuery({
     queryKey: [key],
     queryFn: async () => {
-      //const response = await fetch(url, opts)
-      //const data: T = await response.json()
-      const { data } = await api.get(url)
+      const result = await api.get(url)
+      const data: T = result.data
       return data
     },
     //staleTime: 1000*4

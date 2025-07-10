@@ -13,7 +13,7 @@ export function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<CreateRoom />} index />
-          <Route element={<Room />} path="/rooms/:slug" />
+          <Route element={<Room />} path="/rooms/:roomSlug" />
         </Routes>
       </BrowserRouter>
     </ QueryClientProvider>
