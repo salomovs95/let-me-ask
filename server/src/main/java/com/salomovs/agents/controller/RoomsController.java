@@ -6,12 +6,13 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.salomovs.agents.dto.AnswerQuestionDto;
 import com.salomovs.agents.dto.CreateQuestionDto;
@@ -20,7 +21,6 @@ import com.salomovs.agents.dto.RoomResponse;
 import com.salomovs.agents.model.entity.Room;
 import com.salomovs.agents.service.RoomService;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,9 +34,9 @@ public class RoomsController {
   @GetMapping
   public ResponseEntity<List<RoomResponse>> getRooms() {
     List<RoomResponse> rooms = roomService.listRooms()
-                                  .stream()
-                                  .map(RoomResponse::parse)
-                                  .collect(Collectors.toList());
+      .stream()
+      .map(RoomResponse::parse)
+      .collect(Collectors.toList());
     return ResponseEntity.status(HttpStatus.OK).body(rooms);
   }
 
@@ -55,16 +55,17 @@ public class RoomsController {
   }
 
   @PostMapping("/{room_slug}/questions")
-  public ResponseEntity<Void> placeQuestion(@PathVariable(name="room_slug") String roomSlug, @RequestBody CreateQuestionDto body) {
-    String questionId = roomService.createQuestion(roomSlug, body);
-    log.warn("New Question Placed: " + questionId);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+  public ResponseEntity<AnswerQuestionDto> placeQuestion(@PathVariable(name="room_slug") String roomSlug, @RequestBody CreateQuestionDto body) {
+    AnswerQuestionDto response = roomService.createQuestion(roomSlug, body);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
-  @PatchMapping("/{room_slug}/questions/{question_id}")
-  public ResponseEntity<Void> answerQuestion(@PathVariable(name="room_slug") String roomSlug, @PathVariable(name="question_id") String questionId, @RequestBody @Valid AnswerQuestionDto body) {
-    log.warn("Updating question " + questionId + " from room " + roomSlug);
-    roomService.updateQuestionAnswer(questionId, body.answer());
-    return ResponseEntity.status(HttpStatus.OK).build();
+  @PostMapping("/{room_slug}/audio")
+  public ResponseEntity<String> uploadAudio(@PathVariable(name="room_slug") String roomSlug, @RequestParam("file") MultipartFile audioFile) {
+    Room room = roomService.findRoom(roomSlug);
+    String chunkId = roomService.handleUploadAudio(room.getId(), audioFile);
+
+    log.warn("Uploading audio chunks: " + audioFile.getOriginalFilename() + ", chunk-id: " + chunkId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(":D");
   }
 }
