@@ -18,15 +18,15 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import { usePost } from '@/http/use-post'
+import { usePostQuestion } from '@/http/use-post-question'
 
 // Esquema de validação no mesmo arquivo conforme solicitado
 const createQuestionSchema = z.object({
   question: z
     .string()
-    .min(1, 'Pergunta é obrigatória')
-    .min(10, 'Pergunta deve ter pelo menos 10 caracteres')
-    .max(500, 'Pergunta deve ter menos de 500 caracteres'),
+    .min(1, 'Question is mandatory!')
+    .min(10, 'Question must have at least 10 characters')
+    .max(500, 'Question must have at most 500 characters length'),
 })
 
 type CreateQuestionFormData = z.infer<typeof createQuestionSchema>
@@ -36,7 +36,7 @@ interface QuestionFormProps {
 }
 
 export function QuestionForm({ roomSlug }: QuestionFormProps) {
-  const { mutateAsync: createQuestion } = usePost(`/rooms/${roomSlug}/questions`, roomSlug)
+  const { mutateAsync: createQuestion } = usePostQuestion(`/rooms/${roomSlug}/questions`, roomSlug)
 
   const form = useForm<CreateQuestionFormData>({
     resolver: zodResolver(createQuestionSchema),

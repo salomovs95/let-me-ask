@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod/v4'
-import { usePost } from '@/http/use-post'
+import { useCreateRoom } from '@/http/use-create-room'
 import { Button } from './ui/button'
 import {
   Card,
@@ -29,7 +29,7 @@ const createRoomSchema = z.object({
 type CreateRoomFormData = z.infer<typeof createRoomSchema>
 
 export function CreateRoomForm() {
-  const { mutateAsync: createRoom } = usePost<CreateRoomFormData>('/rooms', 'rooms-list')
+  const { mutateAsync: createRoom } = useCreateRoom<CreateRoomFormData>('/rooms', 'rooms-list')
 
   const createRoomForm = useForm<CreateRoomFormData>({
     resolver: zodResolver(createRoomSchema),

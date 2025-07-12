@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 
-export function usePost<T=any>(url: String, key: String) {
+export function useCreateRoom<T=any>(url: String, key: String) {
   const qClient = useQueryClient()
 
   return useMutation({

@@ -34,6 +34,7 @@ public class Room {
   @Column(nullable=false)
   private String title;
 
+  @Column(columnDefinition="TEXT")
   private String description;
   private LocalDateTime createdAt;
 
