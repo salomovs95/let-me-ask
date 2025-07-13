@@ -1,14 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Button } from '@/components/ui/button'
+
+import { usePostQuestion } from '../http/use-post-question'
+import { Button } from './ui/button'
+import { Textarea } from './ui/textarea'
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from './ui/card'
+
 import {
   Form,
   FormControl,
@@ -16,9 +21,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
-import { usePostQuestion } from '@/http/use-post-question'
+} from './ui/form'
 
 // Esquema de validação no mesmo arquivo conforme solicitado
 const createQuestionSchema = z.object({
@@ -36,7 +39,7 @@ interface QuestionFormProps {
 }
 
 export function QuestionForm({ roomSlug }: QuestionFormProps) {
-  const { mutateAsync: createQuestion } = usePostQuestion(`/rooms/${roomSlug}/questions`, roomSlug)
+  const { mutateAsync: createQuestion } = usePostQuestion<CreateQuestionFormData>(`/rooms/${roomSlug}/questions`, roomSlug)
 
   const form = useForm<CreateQuestionFormData>({
     resolver: zodResolver(createQuestionSchema),

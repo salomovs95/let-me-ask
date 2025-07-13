@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 
-import { BASE_URL } from '@/lib/api'
-import { Button } from '@/components/ui/button'
+import { BASE_URL } from '../lib/api'
+import { Button } from '../components/ui/button'
 
 const isRecordingSupported =
   !!navigator.mediaDevices &&

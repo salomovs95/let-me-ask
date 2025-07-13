@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { api } from '../lib/api'
 
-export function useCreateRoom<T=any>(url: String, key: String) {
+export function useCreateRoom<T=any>(url: string, key: string) {
   const qClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (data: T)=>{
-      await api.post(url, data)
+      return await api.post(url, data)
     },
     onSuccess: ()=>{
       qClient.invalidateQueries({ queryKey:[key]})

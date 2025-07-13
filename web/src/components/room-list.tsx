@@ -1,8 +1,12 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useFetch } from '@/http/use-fetch'
-import { dayjs } from '@/lib/dayjs'
+
+import { type Room } from '../http/types'
+import { useFetch } from '../http/use-fetch'
+
+import { dayjs } from '../lib/dayjs'
 import { Badge } from './ui/badge'
+
 import {
   Card,
   CardContent,
@@ -12,7 +16,7 @@ import {
 } from './ui/card'
 
 export function RoomList() {
-  const { data, isLoading } = useFetch('/rooms', 'rooms-list')
+  const { data, isLoading } = useFetch<Room[]>('/rooms', 'rooms-list')
 
   return (
     <Card>
