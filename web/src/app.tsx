@@ -1,11 +1,9 @@
-import './index.css'
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import { CreateRoom } from '@/pages/create-room'
-import { RecordRoomAudio } from '@/pages/record-room-audio'
-import { Room } from '@/pages/room'
+import { CreateRoom } from './pages/create-room'
+import { RecordRoomAudio } from './pages/record-room-audio'
+import { Room } from './pages/room'
 
 const client = new QueryClient()
 export function App() {

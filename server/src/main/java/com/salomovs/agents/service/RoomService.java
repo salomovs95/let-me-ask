@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.salomovs.agents.dto.AnswerQuestionDto;
 import com.salomovs.agents.dto.CreateQuestionDto;
 import com.salomovs.agents.dto.CreateRoomDto;
+import com.salomovs.agents.exception.AudioChunkProcessingException;
+import com.salomovs.agents.exception.DataNotFoundException;
 import com.salomovs.agents.model.entity.AudioChunk;
 import com.salomovs.agents.model.entity.Room;
 import com.salomovs.agents.model.entity.RoomQuestion;
@@ -62,7 +64,7 @@ public class RoomService {
   public Room findRoom(String slug) {
     Room room = roomRepo
       .findBySlug(slug)
-      .orElseThrow(()->new RuntimeException("Room Not Found Or Not Exists"));
+      .orElseThrow(()->new DataNotFoundException("Room Not Found Or Not Exists"));
     return room;
   }
 
@@ -75,7 +77,7 @@ public class RoomService {
 
       return audioChunkId;
     } catch (IOException e) {
-      throw new RuntimeException("Failed uploading audio file!");
+      throw new AudioChunkProcessingException("Failed uploading audio file!");
     }
   }
 }

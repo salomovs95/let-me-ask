@@ -2,6 +2,8 @@ package com.salomovs.agents.service;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Component;
 
 import com.google.genai.Client;
@@ -12,11 +14,11 @@ import com.google.genai.types.EmbedContentResponse;
 import com.google.genai.types.GenerateContentConfig;
 import com.google.genai.types.GenerateContentResponse;
 import com.google.genai.types.Part;
+
+import com.salomovs.agents.exception.AudioChunkProcessingException;
 import com.salomovs.agents.model.entity.AudioChunk;
 import com.salomovs.agents.model.entity.RoomQuestion;
 import com.salomovs.agents.model.repository.AudioChunkRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class AIService {
 
     var result = aiClient.models.generateContent(model, content, GenerateContentConfig.builder().build());
     if (result.text().isBlank() || result.text() == null) {
-      throw new RuntimeException("Can't transcribe given audio");
+      throw new AudioChunkProcessingException("Can't transcribe given audio");
     }
 
     return result.text();
@@ -51,7 +53,7 @@ public class AIService {
     List<Float> embeddings = contents
       .get(0)
       .values()
-      .orElseThrow(()->new RuntimeException("Couldn't proccess transcription at this time!"));
+      .orElseThrow(()->new AudioChunkProcessingException("Couldn't proccess transcription at this time!"));
 
     return embeddings;
   }
@@ -80,7 +82,7 @@ public class AIService {
     GenerateContentResponse result = aiClient.models.generateContent(model, prompt, null);
 
     if (result.text().isBlank() || result.text() == null) {
-      throw new RuntimeException("Couldn't generate answer this time!");
+      throw new AudioChunkProcessingException("Couldn't generate answer this time!");
     }
 
     return result.text();

@@ -1,32 +1,22 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { type Room, type PostQuestionResponse } from './types'
+import { api } from '../lib/api'
 
-interface Question {
-  id: String
-  roomId: String
-  question: String
-  answer?: String | null
-  createdAt: String
-  isGeneratingAnswer?: boolean
-}
-
-interface Room {
-  questions: Question[]
-}
-
-export function usePostQuestion<T=any>(url: String, key: String) {
+export function usePostQuestion<T=any>(url: string, key: string) {
   const qClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: T)=>{
-      await api.post(url, data)
+    mutationFn: async (payload: T)=>{
+      const data = await api.post<PostQuestionResponse>(url, payload)
+      return data
     },
-    onMutate({ question }) {
+    onMutate({ question }: any) {
       const room = qClient.getQueryData<Room>([key])
-      const questionsArray = room.questions ?? []
+      const questionsArray = room?.questions ?? []
 
       const newQuestion = {
         id: crypto.randomUUID(),
+        roomId: room?.questions[0].roomId ?? "",
         question,
         answer: null,
         createdAt: new Date().toISOString(),
@@ -35,12 +25,12 @@ export function usePostQuestion<T=any>(url: String, key: String) {
 
       qClient.setQueryData<Room>(
         [key],
-        {...room, questions:[newQuestion, ...questionsArray]}
+        {...room!, questions:[newQuestion, ...questionsArray]}
       )
 
       return { newQuestion, room }
     },
-    onSuccess(data, _variables, context) {
+    onSuccess({ data }, _variables, context) {
       qClient.setQueryData<Room>(
         [key],
         (room) => {
@@ -52,11 +42,11 @@ export function usePostQuestion<T=any>(url: String, key: String) {
             return room
           }
 
-          return {...room, questions: questions.map((question) => {
+          return {...room!, questions: room.questions.map((question) => {
             if (question.id === context.newQuestion.id) {
               return {
                 ...context.newQuestion,
-                id: data.questionId,
+                id: data.questionId ?? "",
                 answer: data.answer,
                 isGeneratingAnswer: false,
               }

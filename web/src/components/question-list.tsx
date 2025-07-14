@@ -1,21 +1,10 @@
-import { useFetch } from '@/http/use-fetch'
+import { type Room } from '../http/types'
+
+import { useFetch } from '../http/use-fetch'
 import { QuestionItem } from './question-item'
 
 interface QuestionListProps {
   roomSlug: string
-}
-
-interface Question {
-  id: String
-  roomId: String
-  question: String
-  answer?: String | null
-  createdAt: String
-  isGeneratingAnswer?: boolean
-}
-
-interface Room {
-  questions: Question[]
 }
 
 export function QuestionList(props: QuestionListProps) {
@@ -29,9 +18,9 @@ export function QuestionList(props: QuestionListProps) {
         </h2>
       </div>
 
-      {data?.questions.map((question) => {
-        return <QuestionItem key={question.id} question={question} />
-      })}
+      {data?.questions.map((question) => (
+        <QuestionItem key={question.id} question={question} />
+      ))}
     </div>
   )
 }

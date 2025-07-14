@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { api } from '../lib/api'
 
-export function useFetch<T=any>(url:String, key:String) {
+export function useFetch<T=any>(url:string, key:string) {
   return useQuery({
     queryKey: [key],
     queryFn: async () => {
