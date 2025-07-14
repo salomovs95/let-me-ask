@@ -1,0 +1,45 @@
+services:
+  nlw-agents-pg:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: agents
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.docker/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  nlw-agents-server:
+    depends_on:
+      nlw-agents-pg:
+        condition: service_healthy
+        restart: true
+    build:
+      context: ./server/
+    environment:
+      DATABASE_URL: jdbc:postgresql://nlw-agents-pg:5432/agents
+      ALLOWED_ORIGINS: http://nlw-agents-client:3333
+      DATABASE_USERNAME: docker
+      DATABASE_PASSWORD: docker
+      SPRING_PROFILE: prod
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+    ports:
+      - "8080:8080"
+
+  nlw-agents-client:
+    depends_on:
+      nlw-agents-server:
+        condition: service_started
+    build:
+      context: ./web/
+    environment:
+      VITE_API_URL: http://nlw-agents-server:8080
+    ports:
+      - "3333:3333"
