@@ -16,7 +16,7 @@
   <h1 align="center">Let Me Ask (the AI)</h1>
 
    <div align="center">
-      A Book Management System
+      A Q&A Room's System powered by A.I.
    </div>
 </div>
 
