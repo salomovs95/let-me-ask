@@ -36,12 +36,53 @@
 An application designed to help live streamers answers the audience with the aid of AI.
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
+
+- Backend
+  - Java 21
+  - Spring Boot 3
+  - Lombok
+  - JPA
+
+- Frontend
+  - Node 21
+  - React 19
+  - Zod
+  - React Hook Form
+  - Dayjs
+  - Axios
+  - Tanstack React Query
+
+- Other tooling
+  - Vite
+  - Apache Maven
+  - Docker
+  - Nginx
+
 ## <a name="features">🔋 Features</a>
+
+- Can create a new room.
+- Can upload audio for use while generate responses using A.I.
+- Can retrieve data about a room.
+- Can post question on a room.
+- Can receive response from A.I. based on audio transcriptions and content similarity.
+
 ## <a name="quick-start">💻 Quick Start</a>
+
 ## <a name="envs">💾 Environment Variables</a>
+
 ## <a name="versions">📅 Releases</a>
+- [ ] **TBD**
+
 ## <a name="contributing">🤝 Contributing</a>
 
+Contributions, issues, and feature requests are welcome!
+
+1. Fork it (<https://github.com/salomovs95/let-me-ask>)
+2. Create your feature branch (`git switch -c feature/fooBar`)
+3. Add your changes to the stage (`git add CHANGEDFILES`)
+4. Commit your changes (`git commit -m 'Add some fooBar'`)
+5. Push to the branch (`git push origin feature/fooBar`)
+6. Create a new PR (Pull Request)
 
 ## <a name="authors">👥 Authors</a>
 
