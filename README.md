@@ -95,7 +95,49 @@ Open [localhost:3333](localhost:3333) in your browser to view the project to tes
 Please, check the port.
 
 ## <a name="envs">💾 Environment Variables</a>
-- [ ] **TBD**
+
+> [!WARNING]
+> Make sure those variables are available before start the application
+
+<details>
+  <summary><code>Database Service</code></summary>
+
+  ```yaml
+  # Those are already defined at container level
+  POSTGRES_USER: CHANGE_ME_LATER
+  POSTGRES_PASSWORD: CHANGE_ME_LATER
+  POSTGRES_DB: CHANGE_ME_LATER
+  ```
+</details>
+
+<details>
+  <summary><code>Backend Service</code></summary>
+  
+  ```yaml
+  # Those are already defined at container level
+  # No need to modify
+  DATABASE_URL: CHANGE_ME_LATER
+  DATABASE_USERNAME: CHANGE_ME_LATER
+  DATABASE_PASSWORD: CHANGE_ME_LATER
+
+  # Change only if deploying to production, otherwise no need to modify
+  SPRING_PROFILE: CHANGE_LATER
+  ALLOWED_ORIGINS: CHANGE_ME_LATER
+
+  # Needed for A.I anseer generatiom, must provide ye own key
+  # See how to generate one at https://aistudio.google.com/app/apikey
+  GOOGLE_API_KEY: CHANGE_ME_LATER
+  ```
+</details>
+
+<details>
+  <summary><code>Frontend Service</code></summary>
+  
+  ```yaml
+  # No need to modify, unless deploying each service separately
+  VITE_API_URL: CHANGE_ME_ATER
+  ```
+</details>
 
 ## <a name="versions">📅 Releases</a>
 - [ ] **TBD**
@@ -129,4 +171,5 @@ Contributions, issues, and feature requests are welcome!
   </tbody>
 </table>
 
-Made in the NLW Agents (20° Edition by Rocketseat) 💜
+> [!NOTE]
+> Made in the NLW Agents (20° Edition by Rocketseat) 💜
