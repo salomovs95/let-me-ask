@@ -37,26 +37,26 @@ An application designed to help live streamers answers the audience with the aid
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
-- Backend
-  - Java 21
-  - Spring Boot 3
-  - Lombok
-  - JPA
+- [x] Backend
+  - [x] Java 21
+  - [x] Spring Boot 3
+  - [x] Lombok
+  - [x] JPA
 
-- Frontend
-  - Node 21
-  - React 19
-  - Zod
-  - React Hook Form
-  - Dayjs
-  - Axios
-  - Tanstack React Query
+- [x] Frontend
+  - [x] Node 21
+  - [x] React 19
+  - [x] Zod
+  - [x] React Hook Form
+  - [x] Dayjs
+  - [x] Axios
+  - [x] Tanstack React Query
 
-- Other tooling
-  - Vite
-  - Apache Maven
-  - Docker
-  - Nginx
+- [x] Other tooling
+  - [x] Vite
+  - [x] Apache Maven
+  - [x] Docker
+  - [x] Nginx
 
 ## <a name="features">🔋 Features</a>
 
@@ -73,8 +73,8 @@ An application designed to help live streamers answers the audience with the aid
 
 To use this project you must have previously setup the following:
 
-- [ ] [Git](#)
-- [ ] [Docker](#)
+- [x] [Git](#)
+- [x] [Docker](#)
 
 **01 - Cloning the Repository**
 
