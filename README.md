@@ -60,15 +60,42 @@ An application designed to help live streamers answers the audience with the aid
 
 ## <a name="features">🔋 Features</a>
 
-- Can create a new room.
-- Can upload audio for use while generate responses using A.I.
-- Can retrieve data about a room.
-- Can post question on a room.
-- Can receive response from A.I. based on audio transcriptions and content similarity.
+- [x] Can create a new room.
+- [x] Can upload audio for use while generate responses using A.I.
+- [x] Can retrieve data about a room.
+- [x] Can post question on a room.
+- [x] Can receive response from A.I. based on audio transcriptions and content similarity.
+- [ ] Can manually answer a question when respnse by A.I. it's not available.
 
 ## <a name="quick-start">💻 Quick Start</a>
 
+**00 - Prerequisites**
+
+To use this project you must have previously setup the following:
+
+- [ ] [Git](#)
+- [ ] [Docker](#)
+
+**01 - Cloning the Repository**
+
+```bash
+git clone https://github.com/salomovs95/let-me-ask
+cd let-me-ask
+```
+
+**02 - Running the Project**
+
+```bash
+docker compose up -d
+# or rather
+docker-compose up -d
+```
+
+Open [localhost:3333](localhost:3333) in your browser to view the project to test the application.
+Please, check the port.
+
 ## <a name="envs">💾 Environment Variables</a>
+- [ ] **TBD**
 
 ## <a name="versions">📅 Releases</a>
 - [ ] **TBD**
