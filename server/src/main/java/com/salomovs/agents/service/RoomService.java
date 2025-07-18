@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.salomovs.agents.dto.AnswerQuestionDto;
+import com.salomovs.agents.dto.CreateAnswerDto;
 import com.salomovs.agents.dto.CreateQuestionDto;
 import com.salomovs.agents.dto.CreateRoomDto;
 import com.salomovs.agents.exception.AudioChunkProcessingException;
@@ -38,27 +39,48 @@ public class RoomService {
   public AnswerQuestionDto createQuestion(String slug, CreateQuestionDto dto) {
     Room room = findRoom(slug);
     RoomQuestion question = new RoomQuestion(dto.question(), room);
+    question = questionRepo.save(question);
 
-    String questionEmbeddings = aiService
-      .generateEmbeddingsF(dto.question())
-      .toString();
+    try {
+      String questionEmbeddings = aiService
+        .generateEmbeddingsF(dto.question())
+        .toString();
 
-    List<AudioChunk> chunks = aiService.getAudioChunks(room.getId(), questionEmbeddings);
+      List<AudioChunk> chunks = aiService.getAudioChunks(room.getId(), questionEmbeddings);
 
-    List<String> transcriptions = chunks
+      List<String> transcriptions = chunks
+        .stream()
+        .map((chunk)->chunk.getTranscription())
+        .collect(Collectors.toList());
+
+      String answer = aiService.generateAnswer(questionRepo.save(question), transcriptions);
+
+      question.setAnswer(answer);
+      questionRepo.save(question);
+
+      AnswerQuestionDto answerDto = new AnswerQuestionDto(question.getId(), answer);
+
+      return answerDto;
+    } catch(Exception e) {
+      return null;
+    }
+  }
+
+  public void answerQuestion(String roomId, CreateAnswerDto dto) {
+    Room room = roomRepo.findById(roomId)
+      .orElseThrow(()->new DataNotFoundException("Room Not Found Or Not Exists"));
+
+    room.getQuestions()
       .stream()
-      .map((chunk)->chunk.getTranscription())
+      .map((question)->{
+        if (question.getId().equals(dto.questionId())) {
+          question.setAnswer(dto.answer());
+        }
+        return question;
+      })
       .collect(Collectors.toList());
 
-    question = questionRepo.save(question);
-    String answer = aiService.generateAnswer(questionRepo.save(question), transcriptions);
-
-    question.setAnswer(answer);
-    questionRepo.save(question);
-
-    AnswerQuestionDto answerDto = new AnswerQuestionDto(question.getId(), answer);
-
-    return answerDto;
+    roomRepo.save(room);
   }
 
   public Room findRoom(String slug) {

@@ -48,7 +48,7 @@ public class AIService {
 
     List<ContentEmbedding> contents = result
       .embeddings()
-      .orElseThrow(()->new RuntimeException("Couldn't proccess transcription at this time!"));
+      .orElseThrow(()->new AudioChunkProcessingException("Couldn't proccess transcription at this time!"));
 
     List<Float> embeddings = contents
       .get(0)
@@ -60,6 +60,7 @@ public class AIService {
 
   public String generateAnswer(RoomQuestion question, List<String> transcriptions) {
     final String model = "gemini-2.5-flash";
+
     String context = transcriptions.stream()
       .reduce("", (acc, nextItem)->acc.concat(nextItem.concat("\n\n")));
 
