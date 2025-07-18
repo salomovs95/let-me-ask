@@ -224,9 +224,9 @@ public class RoomsController {
       @ApiResponse(responseCode="500", content=@Content)
     }
   )
-  @PatchMapping("/{room_id}/questions")
-  public ResponseEntity<Void> answerIfAICouldNot(@PathVariable(name="room_id") String roomId, @RequestBody CreateAnswerDto body) {
-    roomService.answerQuestion(roomId, body);
+  @PatchMapping("/{room_slug}/questions")
+  public ResponseEntity<Void> answerIfAICouldNot(@PathVariable(name="room_slug") String roomSlug, @RequestBody CreateAnswerDto body) {
+    roomService.answerQuestion(roomSlug, body);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

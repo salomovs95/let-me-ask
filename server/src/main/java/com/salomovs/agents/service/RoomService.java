@@ -66,9 +66,8 @@ public class RoomService {
     }
   }
 
-  public void answerQuestion(String roomId, CreateAnswerDto dto) {
-    Room room = roomRepo.findById(roomId)
-      .orElseThrow(()->new DataNotFoundException("Room Not Found Or Not Exists"));
+  public void answerQuestion(String roomSlug, CreateAnswerDto dto) {
+    Room room = findRoom(roomSlug);
 
     room.getQuestions()
       .stream()
