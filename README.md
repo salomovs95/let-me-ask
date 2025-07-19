@@ -65,7 +65,8 @@ An application designed to help live streamers answers the audience with the aid
 - [x] Can retrieve data about a room.
 - [x] Can post question on a room.
 - [x] Can receive response from A.I. based on audio transcriptions and content similarity.
-- [ ] Can manually answer a question when respnse by A.I. it's not available.
+- [x] Can manually answer a question when respnse by A.I. it's not available.
+- [ ] Answers must be ranked by similarity/compability, many can be sent, but only the answer with higher similarity is displayed to thw audience.
 
 ## <a name="quick-start">💻 Quick Start</a>
 
