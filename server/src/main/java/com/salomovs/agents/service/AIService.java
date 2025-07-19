@@ -42,7 +42,7 @@ public class AIService {
     return result.text();
   }
 
-  public List<Float> generateEmbeddingsF(String text) {
+  public List<Float> generateEmbeddings(String text) {
     final String model = "text-embedding-004";
     EmbedContentResponse result = aiClient.models.embedContent(model, List.of(text), EmbedContentConfig.builder().taskType("RETRIEVAL_DOCUMENT").build());
 

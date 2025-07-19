@@ -43,7 +43,7 @@ public class RoomService {
 
     try {
       String questionEmbeddings = aiService
-        .generateEmbeddingsF(dto.question())
+        .generateEmbeddings(dto.question())
         .toString();
 
       List<AudioChunk> chunks = aiService.getAudioChunks(room.getId(), questionEmbeddings);
