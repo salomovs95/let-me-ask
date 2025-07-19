@@ -16,7 +16,7 @@ export function usePostQuestion<T=any>(url: string, key: string) {
 
       const newQuestion = {
         id: crypto.randomUUID(),
-        roomId: room?.questions[0].roomId ?? "",
+        roomId: '',
         question,
         answer: null,
         createdAt: new Date().toISOString(),
@@ -46,8 +46,8 @@ export function usePostQuestion<T=any>(url: string, key: string) {
             if (question.id === context.newQuestion.id) {
               return {
                 ...context.newQuestion,
-                id: data.questionId ?? "",
-                answer: data.answer,
+                id: data.questionId ?? '',
+                answer: data.answer.startsWith('Não possuo informações suficientes para responder') ? null :data.answer,
                 isGeneratingAnswer: false,
               }
             }

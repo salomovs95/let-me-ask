@@ -48,7 +48,7 @@ public class AIService {
 
     List<ContentEmbedding> contents = result
       .embeddings()
-      .orElseThrow(()->new RuntimeException("Couldn't proccess transcription at this time!"));
+      .orElseThrow(()->new AudioChunkProcessingException("Couldn't proccess transcription at this time!"));
 
     List<Float> embeddings = contents
       .get(0)
@@ -60,6 +60,7 @@ public class AIService {
 
   public String generateAnswer(RoomQuestion question, List<String> transcriptions) {
     final String model = "gemini-2.5-flash";
+
     String context = transcriptions.stream()
       .reduce("", (acc, nextItem)->acc.concat(nextItem.concat("\n\n")));
 
@@ -77,6 +78,7 @@ public class AIService {
       - Mantenha um tom educativo e profissional;
       - Cite trechos relevantes do contexto se apropriado;
       - Se for citar o contexto, utilize o termo \"conteúdo da aula\";
+      - Se caso não houver contexto ou o contexto não for suficiente, inicie a sua resposta com o termo \"Oh mai gáh!\";
     """, context, question.getQuestion());
 
     GenerateContentResponse result = aiClient.models.generateContent(model, prompt, null);
