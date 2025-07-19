@@ -78,6 +78,7 @@ public class AIService {
       - Mantenha um tom educativo e profissional;
       - Cite trechos relevantes do contexto se apropriado;
       - Se for citar o contexto, utilize o termo \"conteúdo da aula\";
+      - Se caso não houver contexto ou o contexto não for suficiente, inicie a sua resposta com o termo \"Oh mai gáh!\";
     """, context, question.getQuestion());
 
     GenerateContentResponse result = aiClient.models.generateContent(model, prompt, null);
