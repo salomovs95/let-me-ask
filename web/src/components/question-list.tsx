@@ -19,7 +19,7 @@ export function QuestionList(props: QuestionListProps) {
       </div>
 
       {data?.questions.map((question) => (
-        <QuestionItem key={question.id} question={question} />
+        <QuestionItem key={question.id} question={question} roomSlug={props.roomSlug} />
       ))}
     </div>
   )

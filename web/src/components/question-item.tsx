@@ -1,27 +1,19 @@
 import { Bot, Loader2, MessageSquare } from 'lucide-react'
 import { type Question } from '../http/types'
+import { QuestionAnswerForm } from './question-answer-form'
 import { Card, CardContent } from './ui/card'
 import { dayjs } from '../lib/dayjs'
 
-/*interface Question {
-  id: string
-  roomId: String
-  question: string
-  answer?: string | null
-  createdAt: string
-  isGeneratingAnswer?: boolean
-}*/
-
 interface QuestionItemProps {
+  roomSlug: string
   question: Question
 }
 
-export function QuestionItem({ question }: QuestionItemProps) {
+export function QuestionItem({ question, roomSlug }: QuestionItemProps) {
   return (
     <Card>
       <CardContent>
         <div className="space-y-4">
-          {/* Question */}
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0">
               <div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
@@ -36,7 +28,7 @@ export function QuestionItem({ question }: QuestionItemProps) {
             </div>
           </div>
 
-          {(!!question.answer || question.isGeneratingAnswer) && (
+          {((!!question.answer && !question.answer.startsWith('Não possuo informações suficientes')) || question.isGeneratingAnswer) ? (
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
                 <div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
@@ -63,6 +55,8 @@ export function QuestionItem({ question }: QuestionItemProps) {
                 </div>
               </div>
             </div>
+          ) : (
+            <QuestionAnswerForm roomSlug={roomSlug} questionId={question.id} />
           )}
 
           <div className="flex justify-end">
