@@ -28,7 +28,7 @@ export function QuestionItem({ question, roomSlug }: QuestionItemProps) {
             </div>
           </div>
 
-          {((!!question.answer && !question.answer.startsWith('Não possuo informações suficientes')) || question.isGeneratingAnswer) ? (
+          {(!!question.answer || question.isGeneratingAnswer) && (
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
                 <div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
@@ -48,15 +48,19 @@ export function QuestionItem({ question, roomSlug }: QuestionItemProps) {
                       </span>
                     </div>
                   ) : (
-                    <p className="whitespace-pre-line text-sm leading-relaxed">
-                      {question.answer}
-                    </p>
+                    <>
+                      {!question.answer?.startsWith('Oh mai gáh!') ? (
+                        <p className="whitespace-pre-line text-sm leading-relaxed">
+                          {question.answer}
+                        </p>
+                      ) : (
+                        <QuestionAnswerForm roomSlug={roomSlug} questionId={question.id} />
+                      )}
+                    </>
                   )}
                 </div>
               </div>
             </div>
-          ) : (
-            <QuestionAnswerForm roomSlug={roomSlug} questionId={question.id} />
           )}
 
           <div className="flex justify-end">

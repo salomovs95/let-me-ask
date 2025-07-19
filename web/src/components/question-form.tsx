@@ -54,13 +54,12 @@ export function QuestionForm({ roomSlug }: QuestionFormProps) {
 
   async function handleCreateQuestion(data: CreateQuestionFormData) {
     const res = await createQuestion(data)
+    form.reset()
 
-    if (!!res.data.answer && res.data.answer.startsWith('Não possuo informações suficientes para responder')) {
+    if (!!res.data.answer && res.data.answer.startsWith('Oh mai gáh!')) {
       setDialogText(res.data.answer)
       toggleDialogOpen(true)
     }
-
-    form.reset()
   }
 
   const { isSubmitting } = form.formState

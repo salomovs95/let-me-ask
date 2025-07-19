@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { useUpdateAnswer } from '../http/use-update-answer'
 import { Button } from './ui/button'
 import { Textarea } from './ui/textarea'
 
@@ -33,14 +34,22 @@ type QuestionAnswerFormProps = {
   questionId: string;
 }
 
-export function QuestionAnswerForm(props: QuestionAnswerFormProps) {
+type UpdateAnswerPayload = {
+  questionId: string
+  answer: string
+}
+
+export function QuestionAnswerForm({ questionId, roomSlug }: QuestionAnswerFormProps) {
+  const { mutateAsync: updateAnswer } = useUpdateAnswer<UpdateAnswerPayload>(`/rooms/${roomSlug}/questions`, roomSlug)
+
   const form = useForm<CreateAnswerFormData>({
     resolver: zodResolver(createAnswerSchema),
     defaultValues: { answer: '' }
   })
 
-  function handleCreateAnswer(data: CreateAnswerFormData) {
-    console.log(data)
+  async function handleCreateAnswer({ answer }: CreateAnswerFormData) {
+    await updateAnswer({ answer, questionId })
+    form.reset()
   }
 
   const { isSubmitting } = form.formState
