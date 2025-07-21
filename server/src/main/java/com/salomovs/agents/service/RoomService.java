@@ -96,4 +96,8 @@ public class RoomService {
       throw new AudioChunkProcessingException("Failed uploading audio file!");
     }
   }
+
+  public List<RoomQuestion> getRoomQuestions(String roomSlug) {
+    return findRoom(roomSlug).getQuestions();
+  }
 }

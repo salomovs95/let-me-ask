@@ -29,6 +29,7 @@ import com.salomovs.agents.dto.CreateAnswerDto;
 import com.salomovs.agents.dto.AnswerQuestionDto;
 import com.salomovs.agents.dto.CreateQuestionDto;
 import com.salomovs.agents.dto.CreateRoomDto;
+import com.salomovs.agents.dto.RoomQuestionResponse;
 import com.salomovs.agents.dto.RoomResponse;
 import com.salomovs.agents.model.entity.Room;
 import com.salomovs.agents.service.RoomService;
@@ -48,7 +49,7 @@ public class RoomsController {
         responseCode="200",
         content=@Content(
           mediaType="application/json",
-          schema=@Schema(implementation=List.class, example="[ {\"slug\":\"nlw-20-agents-intermediate\", \"title\":\"NLW 20 Agents Intermediate\", \"description\":\"A room to talk about the challenges and doubts in the course of the event.\", \"createdAt\":\"2025-07-07T00:00:00z\", \"questions\":[]} ]")
+          schema=@Schema(implementation=List.class, example="[ {\"slug\":\"nlw-20-agents-intermediate\", \"title\":\"NLW 20 Agents Intermediate\", \"description\":\"A room to talk about the challenges and doubts in the course of the event.\", \"createdAt\":\"2025-07-07T00:00:00z\" } ]")
         )
       ),
       @ApiResponse(
@@ -102,13 +103,13 @@ public class RoomsController {
 
   @Tag(name="Room")
   @Operation(
-    summary="Retrieves data for a given room",
+    summary="Retrieves questions data for a given room",
     responses={
       @ApiResponse(
         responseCode="200",
          content=@Content(
            mediaType="application/json",
-           schema=@Schema(implementation=RoomResponse.class, example="{\"slug\":\"nlw20-agents-intermediate\", \"title\":\"NLW20 Agents Intermediate\", \"description\":\"A room to talk about the challenges and doubts in the course of the event.\", \"createdAt\":\"2025-07-07T00:00:00z\", \"questions\":[]}")
+           schema=@Schema(implementation=List.class, example="[]")
          )
       ),
       @ApiResponse(
@@ -127,11 +128,15 @@ public class RoomsController {
       )
     }
   )
-  @GetMapping("/{room_slug}")
-  public ResponseEntity<RoomResponse> findRoomBySlug(@PathVariable(name="room_slug") String roomSlug) {
-    Room room = roomService.findRoom(roomSlug);
-    RoomResponse res = RoomResponse.parse(room);
-    return ResponseEntity.status(HttpStatus.OK).body(res);
+  @GetMapping("/{room_slug}/questions")
+  public ResponseEntity<List<RoomQuestionResponse>> findRoomBySlug(@PathVariable(name="room_slug") String roomSlug) {
+    List<RoomQuestionResponse> questions = roomService
+      .getRoomQuestions(roomSlug)
+      .stream()
+      .map(RoomQuestionResponse::parse)
+      .collect(Collectors.toList());
+
+    return ResponseEntity.status(HttpStatus.OK).body(questions);
   }
 
   @Tag(name="Question")
