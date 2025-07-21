@@ -98,4 +98,10 @@ public class AIService {
   public List<AudioChunk> getAudioChunks(String roomId, String embeddings) {
     return audioChunkRepository.findByRoomId(roomId, embeddings);
   }
+
+  public Float calculateAnswerSimilarity(String question, String answer) {
+    String qEmbeddings = generateEmbeddings(question).toString();
+    String aEmbeddings = generateEmbeddings(answer).toString();
+    return audioChunkRepository.getSimilarityGrade(qEmbeddings, aEmbeddings);
+  }
 }

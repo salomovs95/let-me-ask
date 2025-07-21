@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,20 +30,24 @@ import lombok.Setter;
 public class RoomQuestion {
   @Id
   @GeneratedValue(strategy=GenerationType.UUID)
-  String id;
+  private String id;
 
   @JsonIgnore
   @ManyToOne
   @JoinColumn(name="room_id", referencedColumnName="id")
-  Room room;
+  private Room room;
 
   @Column(columnDefinition="TEXT")
-  String question;
+  private String question;
 
-  @Column(columnDefinition="TEXT")
-  String answer;
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name="answerText", column=@Column(name="answer", columnDefinition="TEXT")),
+    @AttributeOverride(name="answerSimilarity", column=@Column(name="answer_similarity_grade"))
+  })
+  private RoomQuestionAnswer answer;
 
-  LocalDateTime createdAt;
+  private LocalDateTime createdAt;
 
   public RoomQuestion(String question, Room room) {
     this.question = question;

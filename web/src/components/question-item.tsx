@@ -28,7 +28,7 @@ export function QuestionItem({ question, roomSlug }: QuestionItemProps) {
             </div>
           </div>
 
-          {(!!question.answer || question.isGeneratingAnswer) && (
+          {(!!question.answer.answerText || question.isGeneratingAnswer) && (
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
                 <div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
@@ -49,9 +49,9 @@ export function QuestionItem({ question, roomSlug }: QuestionItemProps) {
                     </div>
                   ) : (
                     <>
-                      {!question.answer?.startsWith('Oh mai gáh!') ? (
+                      {(question.answer.answerSimilarity >= 0.7) ? (
                         <p className="whitespace-pre-line text-sm leading-relaxed">
-                          {question.answer}
+                          {question.answer.answerText}
                         </p>
                       ) : (
                         <QuestionAnswerForm roomSlug={roomSlug} questionId={question.id} />

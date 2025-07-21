@@ -16,9 +16,11 @@ import com.salomovs.agents.exception.DataNotFoundException;
 import com.salomovs.agents.model.entity.AudioChunk;
 import com.salomovs.agents.model.entity.Room;
 import com.salomovs.agents.model.entity.RoomQuestion;
+import com.salomovs.agents.model.entity.RoomQuestionAnswer;
 import com.salomovs.agents.model.repository.RoomQuestionRepository;
 import com.salomovs.agents.model.repository.RoomRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service @RequiredArgsConstructor
@@ -54,32 +56,25 @@ public class RoomService {
         .collect(Collectors.toList());
 
       String answer = aiService.generateAnswer(questionRepo.save(question), transcriptions);
+      Float answerSimilarity = answer.startsWith("Oh mai gáh!") ? 0f : aiService.calculateAnswerSimilarity(question.getQuestion(), answer);
 
-      question.setAnswer(answer);
+      question.setAnswer(new RoomQuestionAnswer(answer.replace("Oh mai gáh! ", ""), answerSimilarity));
       questionRepo.save(question);
 
-      AnswerQuestionDto answerDto = new AnswerQuestionDto(question.getId(), answer);
-
-      return answerDto;
+      return new AnswerQuestionDto(question.getId(), answer, answerSimilarity);
     } catch(Exception e) {
       return null;
     }
   }
 
-  public void answerQuestion(String roomSlug, CreateAnswerDto dto) {
-    Room room = findRoom(roomSlug);
+  public AnswerQuestionDto answerQuestion(String roomSlug, CreateAnswerDto dto) {
+    RoomQuestion question = questionRepo.findById(dto.questionId()).orElseThrow(()-> new EntityNotFoundException("Question not found"));
+    Float answerSimilarity = aiService.calculateAnswerSimilarity(question.getQuestion(), dto.answer());
 
-    room.getQuestions()
-      .stream()
-      .map((question)->{
-        if (question.getId().equals(dto.questionId())) {
-          question.setAnswer(dto.answer());
-        }
-        return question;
-      })
-      .collect(Collectors.toList());
+    question.setAnswer(new RoomQuestionAnswer(dto.answer(), answerSimilarity));
+    questionRepo.save(question);
 
-    roomRepo.save(room);
+    return new AnswerQuestionDto(dto.questionId(), dto.answer(), answerSimilarity);
   }
 
   public Room findRoom(String slug) {
@@ -93,12 +88,16 @@ public class RoomService {
     try {
       byte[] audioBytes = audioFile.getBytes();
       String transcription = aiService.generateTranscription(audioBytes, audioFile.getContentType());
-      List<Float> embeddings = aiService.generateEmbeddingsF(transcription);
+      List<Float> embeddings = aiService.generateEmbeddings(transcription);
       String audioChunkId = aiService.saveAudioChunk(transcription, roomId, embeddings);
 
       return audioChunkId;
     } catch (IOException e) {
       throw new AudioChunkProcessingException("Failed uploading audio file!");
     }
+  }
+
+  public List<RoomQuestion> getRoomQuestions(String roomSlug) {
+    return findRoom(roomSlug).getQuestions();
   }
 }
