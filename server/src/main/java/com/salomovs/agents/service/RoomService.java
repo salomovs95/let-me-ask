@@ -16,6 +16,7 @@ import com.salomovs.agents.exception.DataNotFoundException;
 import com.salomovs.agents.model.entity.AudioChunk;
 import com.salomovs.agents.model.entity.Room;
 import com.salomovs.agents.model.entity.RoomQuestion;
+import com.salomovs.agents.model.entity.RoomQuestionAnswer;
 import com.salomovs.agents.model.repository.RoomQuestionRepository;
 import com.salomovs.agents.model.repository.RoomRepository;
 
@@ -54,11 +55,12 @@ public class RoomService {
         .collect(Collectors.toList());
 
       String answer = aiService.generateAnswer(questionRepo.save(question), transcriptions);
+      Float answerSimilarity = answer.startsWith("Oh mai gáh!") ? 0f : 1f;
 
-      question.setAnswer(answer);
+      question.setAnswer(new RoomQuestionAnswer(answer.replace("Oh mai gáh! ", ""), answerSimilarity));
       questionRepo.save(question);
 
-      AnswerQuestionDto answerDto = new AnswerQuestionDto(question.getId(), answer);
+      AnswerQuestionDto answerDto = new AnswerQuestionDto(question.getId(), answer, answerSimilarity);
 
       return answerDto;
     } catch(Exception e) {
@@ -73,7 +75,8 @@ public class RoomService {
       .stream()
       .map((question)->{
         if (question.getId().equals(dto.questionId())) {
-          question.setAnswer(dto.answer());
+          Float answerSimilarity = 0f;
+          question.setAnswer(new RoomQuestionAnswer(dto.answer(), answerSimilarity));
         }
         return question;
       })
@@ -93,7 +96,7 @@ public class RoomService {
     try {
       byte[] audioBytes = audioFile.getBytes();
       String transcription = aiService.generateTranscription(audioBytes, audioFile.getContentType());
-      List<Float> embeddings = aiService.generateEmbeddingsF(transcription);
+      List<Float> embeddings = aiService.generateEmbeddings(transcription);
       String audioChunkId = aiService.saveAudioChunk(transcription, roomId, embeddings);
 
       return audioChunkId;

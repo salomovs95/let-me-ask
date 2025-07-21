@@ -3,12 +3,13 @@ package com.salomovs.agents.dto;
 import java.time.LocalDateTime;
 
 import com.salomovs.agents.model.entity.RoomQuestion;
+import com.salomovs.agents.model.entity.RoomQuestionAnswer;
 
 public record RoomQuestionResponse(
   String id,
   String roomId,
   String question,
-  String answer,
+  RoomQuestionAnswer answer,
   LocalDateTime createdAt
 ) {
   public static RoomQuestionResponse parse(RoomQuestion question) {
