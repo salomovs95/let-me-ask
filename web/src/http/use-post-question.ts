@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { type Room, type PostQuestionResponse } from './types'
+import { type Question, type PostQuestionResponse } from './types'
 import { api } from '../lib/api'
 
 export function usePostQuestion<T=any>(url: string, key: string) {
@@ -11,43 +11,48 @@ export function usePostQuestion<T=any>(url: string, key: string) {
       return data
     },
     onMutate({ question }: any) {
-      const room = qClient.getQueryData<Room>([key])
-      const questionsArray = room?.questions ?? []
+      const questions = qClient.getQueryData<Question[]>([key])
 
       const newQuestion = {
         id: crypto.randomUUID(),
         roomId: '',
         question,
-        answer: null,
+        answer: {
+          answerText: '',
+          answerSimilarity: 0.0
+        },
         createdAt: new Date().toISOString(),
         isGeneratingAnswer: true,
       }
 
-      qClient.setQueryData<Room>(
+      qClient.setQueryData<Question[]>(
         [key],
-        {...room!, questions:[newQuestion, ...questionsArray]}
+        [newQuestion, ...questions]
       )
 
-      return { newQuestion, room }
+      return { newQuestion, questions }
     },
     onSuccess({ data }, _variables, context) {
       qClient.setQueryData<Room>(
         [key],
-        (room) => {
-          if (!room) {
-            return room
+        (questions) => {
+          if (!questions) {
+            return questions
           }
 
           if (!context.newQuestion) {
-            return room
+            return questions
           }
 
-          return {...room!, questions: room.questions.map((question) => {
+          return { questions: questions.map((question) => {
             if (question.id === context.newQuestion.id) {
               return {
                 ...context.newQuestion,
                 id: data.questionId ?? '',
-                answer: data.answer.startsWith('Não possuo informações suficientes para responder') ? null :data.answer,
+                answer: {
+                  answerText: data.answer,
+                  answerSimilaritt: data.answerSimilarity
+                },
                 isGeneratingAnswer: false,
               }
             }
@@ -58,10 +63,10 @@ export function usePostQuestion<T=any>(url: string, key: string) {
       )
     },
     onError(_error, _variables, context) {
-      if (context?.room) {
+      if (context?.questions) {
         qClient.setQueryData<Room>(
           [key],
-          context.room
+          context.questions
         )
       }
     },
