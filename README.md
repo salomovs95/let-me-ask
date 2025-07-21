@@ -37,26 +37,92 @@ An application designed to help live streamers answers the audience with the aid
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
-- [x] Backend
-  - [x] Java 21
-  - [x] Spring Boot 3
-  - [x] Lombok
-  - [x] JPA
-
-- [x] Frontend
-  - [x] Node 21
-  - [x] React 19
-  - [x] Zod
-  - [x] React Hook Form
-  - [x] Dayjs
-  - [x] Axios
-  - [x] Tanstack React Query
-
-- [x] Other tooling
-  - [x] Vite
-  - [x] Apache Maven
-  - [x] Docker
-  - [x] Nginx
+<table text-align="center">
+  <thead>
+    <tr>
+      <th>TOOL</th>
+      <th>BACK</th>
+      <th>FRONT</th>
+    </tr>
+  </thead>
+  <tbody style="text-align:center;">
+    <tr>
+      <td>Java 21</td>
+      <td>✅</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Spring Boot 3</td>
+      <td>✅</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Lombok</td>
+      <td>✅</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Spring Data JPA</td>
+      <td>✅</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>NodeJS 21</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>ReactJS</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Vite</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Zod</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>React Hook Form</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Day.js</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Axios</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Tanstack React Query</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>NginX</td>
+      <td></td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Apache Maven</td>
+      <td>✅</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Docker</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+  </tbody>
+</table>
 
 ## <a name="features">🔋 Features</a>
 
@@ -66,7 +132,7 @@ An application designed to help live streamers answers the audience with the aid
 - [x] Can post question on a room.
 - [x] Can receive response from A.I. based on audio transcriptions and content similarity.
 - [x] Can manually answer a question when respnse by A.I. it's not available.
-- [ ] Answers must be ranked by similarity/compability, many can be sent, but only the answer with higher similarity is displayed to thw audience.
+- [x] If an answer has a low grade similarity with the question, a form for user answes should be visible.
 
 ## <a name="quick-start">💻 Quick Start</a>
 
