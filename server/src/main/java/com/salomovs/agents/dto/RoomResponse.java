@@ -8,13 +8,15 @@ public record RoomResponse(
   String slug,
   String title,
   String description,
-  LocalDateTime createdAt
+  LocalDateTime createdAt,
+  Integer questionsCount
 ) {
   public static RoomResponse parse(Room room) {
     return new RoomResponse(
       room.getSlug(),
       room.getTitle(),
       room.getDescription(),
-      room.getCreatedAt());
+      room.getCreatedAt(),
+      room.getQuestions().size());
   }
 }
