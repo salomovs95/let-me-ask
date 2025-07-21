@@ -1,4 +1,4 @@
-import { type Room } from '../http/types'
+import { type Question } from '../http/types'
 
 import { useFetch } from '../http/use-fetch'
 import { QuestionItem } from './question-item'
@@ -8,7 +8,7 @@ interface QuestionListProps {
 }
 
 export function QuestionList(props: QuestionListProps) {
-  const { data } = useFetch<Room>(`/rooms/${props.roomSlug}`, props.roomSlug)
+  const { data } = useFetch<Question[]>(`/rooms/${props.roomSlug}/questions`, props.roomSlug)
 
   return (
     <div className="space-y-6">
@@ -18,7 +18,7 @@ export function QuestionList(props: QuestionListProps) {
         </h2>
       </div>
 
-      {data?.questions.map((question) => (
+      {data?.map((question) => (
         <QuestionItem key={question.id} question={question} roomSlug={props.roomSlug} />
       ))}
     </div>
