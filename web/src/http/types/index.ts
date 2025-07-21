@@ -7,7 +7,10 @@ export interface Question {
   id: string
   roomId: string
   question: string
-  answer?: string | null
+  answer: {
+    answerText: string
+    answerSimilarity: number
+  }
   createdAt: string
   isGeneratingAnswer?: boolean
 }
@@ -17,6 +20,5 @@ export interface Room {
   title: string
   description: string
   createdAt: string
-  questionsCount?: number | null
-  questions: Question[]
+  questionsCount: number
 }
