@@ -68,6 +68,11 @@ An application designed to help live streamers answers the audience with the aid
       <td></td>
     </tr>
     <tr>
+      <td>PostgreSQL 17</td>
+      <td>✅</td>
+      <td></td>
+    </tr>
+    <tr>
       <td>NodeJS 21</td>
       <td></td>
       <td>✅</td>
