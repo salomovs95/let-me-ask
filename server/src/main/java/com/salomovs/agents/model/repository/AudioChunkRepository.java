@@ -24,4 +24,15 @@ public interface AudioChunkRepository extends JpaRepository<AudioChunk, String> 
   )
   List<AudioChunk> findByRoomId(String roomId,
                                 String embeddings);
+
+  @Query(
+    value="""
+      SELECT 1 - (e1.embeddings::vector <=> e2.embeddings::vector)
+      FROM ( SELECT ?1 AS embeddings ) AS e1
+      JOIN ( SELECT ?2 AS embeddings ) AS e2
+      ON 1 - (e1.embeddings::vector <=> e2.embeddings::vector) > 0.0;
+    """,
+    nativeQuery=true
+  )
+  Float getSimilarityGrade(String arg0, String arg1);
 }

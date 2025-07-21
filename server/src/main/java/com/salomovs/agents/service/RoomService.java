@@ -20,6 +20,7 @@ import com.salomovs.agents.model.entity.RoomQuestionAnswer;
 import com.salomovs.agents.model.repository.RoomQuestionRepository;
 import com.salomovs.agents.model.repository.RoomRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service @RequiredArgsConstructor
@@ -55,34 +56,25 @@ public class RoomService {
         .collect(Collectors.toList());
 
       String answer = aiService.generateAnswer(questionRepo.save(question), transcriptions);
-      Float answerSimilarity = answer.startsWith("Oh mai gáh!") ? 0f : 1f;
+      Float answerSimilarity = answer.startsWith("Oh mai gáh!") ? 0f : aiService.calculateAnswerSimilarity(question.getQuestion(), answer);
 
       question.setAnswer(new RoomQuestionAnswer(answer.replace("Oh mai gáh! ", ""), answerSimilarity));
       questionRepo.save(question);
 
-      AnswerQuestionDto answerDto = new AnswerQuestionDto(question.getId(), answer, answerSimilarity);
-
-      return answerDto;
+      return new AnswerQuestionDto(question.getId(), answer, answerSimilarity);
     } catch(Exception e) {
       return null;
     }
   }
 
-  public void answerQuestion(String roomSlug, CreateAnswerDto dto) {
-    Room room = findRoom(roomSlug);
+  public AnswerQuestionDto answerQuestion(String roomSlug, CreateAnswerDto dto) {
+    RoomQuestion question = questionRepo.findById(dto.questionId()).orElseThrow(()-> new EntityNotFoundException("Question not found"));
+    Float answerSimilarity = aiService.calculateAnswerSimilarity(question.getQuestion(), dto.answer());
 
-    room.getQuestions()
-      .stream()
-      .map((question)->{
-        if (question.getId().equals(dto.questionId())) {
-          Float answerSimilarity = 0f;
-          question.setAnswer(new RoomQuestionAnswer(dto.answer(), answerSimilarity));
-        }
-        return question;
-      })
-      .collect(Collectors.toList());
+    question.setAnswer(new RoomQuestionAnswer(dto.answer(), answerSimilarity));
+    questionRepo.save(question);
 
-    roomRepo.save(room);
+    return new AnswerQuestionDto(dto.questionId(), dto.answer(), answerSimilarity);
   }
 
   public Room findRoom(String slug) {
