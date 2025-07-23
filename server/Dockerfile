@@ -1,7 +1,7 @@
 FROM alpine:3.22 AS build
 
 COPY mvnw .
-COPY mvn/ .
+COPY .mvn/ .
 COPY pom.xml .
 COPY src/ .
 
