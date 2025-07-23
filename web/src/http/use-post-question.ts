@@ -11,7 +11,7 @@ export function usePostQuestion<T=any>(url: string, key: string) {
       return data
     },
     onMutate({ question }: any) {
-      const questions = qClient.getQueryData<Question[]>([key])
+      const questions = qClient.getQueryData<Question[]>([key]) ?? []
 
       const newQuestion = {
         id: crypto.randomUUID(),
@@ -33,40 +33,40 @@ export function usePostQuestion<T=any>(url: string, key: string) {
       return { newQuestion, questions }
     },
     onSuccess({ data }, _variables, context) {
-      qClient.setQueryData<Room>(
+      qClient.setQueryData<Question[]>(
         [key],
-        (questions) => {
+        (questions:Question[]|undefined) => {
           if (!questions) {
-            return questions
+            return []
           }
 
           if (!context.newQuestion) {
             return questions
           }
 
-          return { questions: questions.map((question) => {
+          return questions.map((question:Question) => {
             if (question.id === context.newQuestion.id) {
               return {
                 ...context.newQuestion,
                 id: data.questionId ?? '',
                 answer: {
                   answerText: data.answer,
-                  answerSimilaritt: data.answerSimilarity
+                  answerSimilarity: data.answerSimilarity
                 },
                 isGeneratingAnswer: false,
               }
             }
 
             return question
-          })}
+          })
         }
       )
     },
     onError(_error, _variables, context) {
       if (context?.questions) {
-        qClient.setQueryData<Room>(
+        qClient.setQueryData<Question[]>(
           [key],
-          context.questions
+          [...context.questions]
         )
       }
     },

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { type Question } from './types'
 import { api } from '../lib/api'
 
 export function useUpdateAnswer<T=any>(url: string, key: string) {
@@ -13,12 +14,12 @@ export function useUpdateAnswer<T=any>(url: string, key: string) {
       //const room = qClient.getQueryData<Room>([key])
       return payload
     },
-    onSuccess: (_data, _variables, context)=>{
+    onSuccess: (_data, _variables, context: any)=>{
       qClient.setQueryData(
         [key],
-        (room)=>{
+        (questions: Question[])=>{
           
-          return { ...room, questions: room.questions.map((question)=>{
+          return questions.map((question: Question)=>{
             if (question.id == context.questionId) {
               return {
                 ...question,
@@ -26,7 +27,7 @@ export function useUpdateAnswer<T=any>(url: string, key: string) {
               }
             }
             return question
-          })}
+          })
         }
       )
       // qClient.invalidateQueries({ queryKey:[key]})

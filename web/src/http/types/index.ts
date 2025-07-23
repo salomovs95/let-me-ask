@@ -1,6 +1,7 @@
 export interface PostQuestionResponse {
   questionId: string
   answer: string
+  answerSimilarity: number
 }
 
 export interface Question {
